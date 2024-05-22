@@ -23,7 +23,7 @@
  * @copyright  2009 Petr Skoda (http://skodak.org)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+//wwc there are no $_REQUEST now
 if (isset($_REQUEST['lang'])) {
     $lang = preg_replace('/[^A-Za-z0-9_-]/i', '', $_REQUEST['lang']);
 } else {
@@ -37,6 +37,7 @@ if (isset($_REQUEST['admin'])) {
 }
 
 // If config.php exists we just created config.php and need to redirect to continue installation
+//wwc there are no config.php file now
 $configfile = './config.php';
 if (file_exists($configfile)) {
     header("Location: $admin/index.php?lang=$lang");
@@ -141,6 +142,7 @@ if (!empty($_POST)) {
     $config->dataroot = trim($_POST['dataroot']);
 
 } else {
+    
     $config->stage    = INSTALL_WELCOME;
 
     $config->dbtype   = empty($distro->dbtype) ? '' : $distro->dbtype; // let distro skip dbtype selection
@@ -159,6 +161,7 @@ if (!empty($_POST)) {
 
 // Fake some settings so that we can use selected functions from moodlelib.php, weblib.php and filelib.php.
 global $CFG;
+
 $CFG = new stdClass();
 $CFG->lang                 = $config->lang;
 $CFG->dirroot              = __DIR__;
@@ -176,7 +179,7 @@ $CFG->langotherroot        = $CFG->dataroot.'/lang';
 $CFG->langlocalroot        = $CFG->dataroot.'/lang';
 $CFG->directorypermissions = isset($distro->directorypermissions) ? $distro->directorypermissions : 00777; // let distros set dir permissions
 $CFG->filepermissions      = ($CFG->directorypermissions & 0666);
-$CFG->umaskpermissions     = (($CFG->directorypermissions & 0777) ^ 0777);
+$CFG->umaskpermissions     = (($CFG->directorypermissions & 0777) ^ 0777); //wwc
 $CFG->running_installer    = true;
 $CFG->early_install_lang   = true;
 $CFG->ostype               = (stristr(PHP_OS, 'win') && !stristr(PHP_OS, 'darwin')) ? 'WINDOWS' : 'UNIX';
