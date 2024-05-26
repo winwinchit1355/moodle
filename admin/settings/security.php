@@ -107,7 +107,6 @@ if ($hassiteconfig) { // speedup for non-admins, add all caps used on this page
     $temp->add(new admin_setting_configtext('passwordreuselimit',
         new lang_string('passwordreuselimit', 'admin'),
         new lang_string('passwordreuselimit_desc', 'admin'), 0, PARAM_INT));
-
     $pwresetoptions = array(
         300 => new lang_string('numminutes', '', 5),
         900 => new lang_string('numminutes', '', 15),

@@ -424,7 +424,7 @@ if ($config->stage == INSTALL_DOWNLOADLANG) {
 
 if ($config->stage == INSTALL_DATABASE) {
     //wwc
-    //database setting page
+    //database setting page and after create config.php file , it return to admin/index.php
     $CFG->early_install_lang = false;
     
     $database = moodle_database::get_driver_instance($config->dbtype, 'native');
@@ -541,7 +541,6 @@ if ($config->stage == INSTALL_DATABASETYPE) {
 }
 
 
-
 if ($config->stage == INSTALL_ENVIRONMENT or $config->stage == INSTALL_PATHS) {
     //wwc
     //this is second page for installation
@@ -656,6 +655,7 @@ if ($distro) {
                                   get_string('chooselanguagehead', 'install'),
                                   get_string('chooselanguagesub', 'install'));
 }
+
 //wwc
 // all languages တွေကို install/lang/... ထဲမှာသိမ်းထား
 $languages = get_string_manager()->get_list_of_translations();

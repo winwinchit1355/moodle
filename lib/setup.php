@@ -1148,7 +1148,7 @@ if (defined('BEHAT_SITE_RUNNING') && !defined('BEHAT_TEST')) {
 if (false) {
     $DB = new moodle_database();
     $OUTPUT = new core_renderer(null, null);
-    $PAGE = new moodle_page();
+    $PAGE = new moodle_page();//wwc lib/pagelib.php
 }
 
 // Cache any immutable config locally to avoid constant DB lookups.

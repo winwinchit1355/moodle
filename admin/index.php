@@ -74,6 +74,9 @@ if (isset($_POST['upgradekey'])) {
 if ((isset($_GET['cache']) and $_GET['cache'] === '0')
         or (isset($_POST['cache']) and $_POST['cache'] === '0')
         or (!isset($_POST['cache']) and !isset($_GET['cache']) and empty($_GET['sesskey']) and empty($_POST['sesskey']))) {
+    //wwc 3
+    //after submit term and condition and click confirm
+
     // Prevent caching at all cost when visiting this page directly,
     // we redirect to self once we known no upgrades are necessary.
     // Note: $_GET and $_POST are used here intentionally because our param cleaning is not loaded yet.
@@ -151,9 +154,10 @@ $url->param('cache', $cache);
 if (isset($upgradekeyhash)) {
     $url->param('upgradekeyhash', $upgradekeyhash);
 }
-$PAGE->set_url($url);
+//wwc
+//$PAGE come from setup.php. config.php ထဲမှာ setup.php ကိုခေါ်ထားတယ်
+$PAGE->set_url($url); // lib/pagelib.php line 1496
 unset($url);
-
 // Are we returning from an add-on installation request at moodle.org/plugins?
 if ($newaddonreq and !$cache and empty($CFG->disableupdateautodeploy)) {
     $target = new moodle_url('/admin/tool/installaddon/index.php', array(
@@ -209,6 +213,7 @@ if (!$version or !$release) {
 }
 
 if (!core_tables_exist()) {
+    //wwc 1
     $PAGE->set_pagelayout('maintenance');
     $PAGE->set_popup_notification_allowed(false);
 
@@ -221,18 +226,20 @@ if (!core_tables_exist()) {
     \core\session\manager::terminate_current();
 
     if (empty($agreelicense)) {
+        //wwc 2
+        //$PAGE come from lib/setup.php line 1151
         $strlicense = get_string('license');
 
         $PAGE->navbar->add($strlicense);
         $PAGE->set_title($strinstallation . moodle_page::TITLE_SEPARATOR . 'Moodle ' . $CFG->target_release, false);
         $PAGE->set_heading($strinstallation);
         $PAGE->set_cacheable(false);
-
-        $output = $PAGE->get_renderer('core', 'admin');
-        echo $output->install_licence_page();
+        $output = $PAGE->get_renderer('core', 'admin'); // lib/pagelib.php line 1009
+        echo $output->install_licence_page(); // admin/renderer.php line 34
         die();
     }
     if (empty($confirmrelease)) {
+        //wwc 4
         require_once($CFG->libdir.'/environmentlib.php');
         list($envstatus, $environmentresults) = check_moodle_environment(normalize_version($release), ENV_SELECT_RELEASE);
         $strcurrentrelease = get_string('currentrelease');
@@ -244,7 +251,7 @@ if (!core_tables_exist()) {
 
         $output = $PAGE->get_renderer('core', 'admin');
         echo $output->install_environment_page($maturity, $envstatus, $environmentresults, $release);
-        die();
+        die();// admin/renderer.php line 81
     }
 
     // check plugin dependencies

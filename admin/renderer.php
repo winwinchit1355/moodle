@@ -22,6 +22,8 @@
  * @copyright  2011 David Mudrak <david@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+//wwc
+//plugin_renderer_base come from lib/outputrenderers.php
 class core_admin_renderer extends plugin_renderer_base {
 
     /**
@@ -35,10 +37,8 @@ class core_admin_renderer extends plugin_renderer_base {
 
         $copyrightnotice = text_to_html(get_string('gpl3'));
         $copyrightnotice = str_replace('target="_blank"', 'onclick="this.target=\'_blank\'"', $copyrightnotice); // extremely ugly validation hack
-
         $continue = new single_button(new moodle_url($this->page->url, array(
             'lang' => $CFG->lang, 'agreelicense' => 1)), get_string('continue'), 'get');
-
         $output .= $this->header();
         $output .= $this->heading('<a href="http://moodle.org">Moodle</a> - Modular Object-Oriented Dynamic Learning Environment');
         $output .= $this->heading(get_string('copyrightnotice'));
