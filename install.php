@@ -179,7 +179,7 @@ $CFG->langotherroot        = $CFG->dataroot.'/lang';
 $CFG->langlocalroot        = $CFG->dataroot.'/lang';
 $CFG->directorypermissions = isset($distro->directorypermissions) ? $distro->directorypermissions : 00777; // let distros set dir permissions
 $CFG->filepermissions      = ($CFG->directorypermissions & 0666);
-$CFG->umaskpermissions     = (($CFG->directorypermissions & 0777) ^ 0777); //wwc
+$CFG->umaskpermissions     = (($CFG->directorypermissions & 0777) ^ 0777); 
 $CFG->running_installer    = true;
 $CFG->early_install_lang   = true;
 $CFG->ostype               = (stristr(PHP_OS, 'win') && !stristr(PHP_OS, 'darwin')) ? 'WINDOWS' : 'UNIX';
@@ -192,6 +192,7 @@ require_once($CFG->libdir.'/setuplib.php');
 
 // we need to make sure we have enough memory to load all libraries
 $memlimit = @ini_get('memory_limit');
+
 if (!empty($memlimit) and $memlimit != -1) {
     if (get_real_size($memlimit) < get_real_size($minrequiredmemory)) {
         // do NOT localise - lang strings would not work here and we CAN not move it to later place
@@ -272,6 +273,8 @@ if (is_null($CFG->dataroot)) {
 }
 
 // now let's do the stage work
+//wwc
+// INSTALL_WELCOME လို stage variable တွေကို installlib.php ထဲမှာသိမ်းထား
 if ($config->stage < INSTALL_WELCOME) {
     $config->stage = INSTALL_WELCOME;
 }
@@ -326,6 +329,8 @@ if ($config->stage == INSTALL_SAVE) {
 
 
 if ($config->stage == INSTALL_DOWNLOADLANG) {
+    //wwc
+    //after paths installation page
     if (empty($CFG->dataroot)) {
         $config->stage = INSTALL_PATHS;
 
@@ -384,7 +389,7 @@ if ($config->stage == INSTALL_DATABASETYPE) {
 
 if ($config->stage == INSTALL_DOWNLOADLANG) {
     $downloaderror = '';
-
+    
     // download and install required lang packs, the lang dir has already been created in install_init_dataroot
     $installer = new lang_installer($CFG->lang);
     $results = $installer->run();
@@ -418,10 +423,12 @@ if ($config->stage == INSTALL_DOWNLOADLANG) {
 
 
 if ($config->stage == INSTALL_DATABASE) {
+    //wwc
+    //database setting page
     $CFG->early_install_lang = false;
-
+    
     $database = moodle_database::get_driver_instance($config->dbtype, 'native');
-
+   
     $sub = '<h3>'.$database->get_name().'</h3>'.$database->get_configuration_help();
 
     install_print_header($config, get_string('database', 'install'), get_string('databasehead', 'install'), $sub);
@@ -536,6 +543,8 @@ if ($config->stage == INSTALL_DATABASETYPE) {
 
 
 if ($config->stage == INSTALL_ENVIRONMENT or $config->stage == INSTALL_PATHS) {
+    //wwc
+    //this is second page for installation
     $curl_fail    = ($lang !== 'en' and !extension_loaded('curl')); // needed for lang pack download
     $zip_fail     = ($lang !== 'en' and !extension_loaded('zip'));  // needed for lang pack download
 
@@ -566,6 +575,8 @@ if ($config->stage == INSTALL_ENVIRONMENT or $config->stage == INSTALL_PATHS) {
 
 
 if ($config->stage == INSTALL_PATHS) {
+    //wwc
+    //after choose English(en) and click next
     $paths = array('wwwroot'  => get_string('wwwroot', 'install'),
                    'dirroot'  => get_string('dirroot', 'install'),
                    'dataroot' => get_string('dataroot', 'install'));
@@ -640,16 +651,20 @@ if ($distro) {
                                   $sub, 'alert-success');
 
 } else {
+   
     install_print_header($config, get_string('language'),
                                   get_string('chooselanguagehead', 'install'),
                                   get_string('chooselanguagesub', 'install'));
 }
-
+//wwc
+// all languages တွေကို install/lang/... ထဲမှာသိမ်းထား
 $languages = get_string_manager()->get_list_of_translations();
+
 echo '<div class="row mb-4">';
 echo '<div class="col-md-3 text-md-right pt-1"><label for="langselect">'.get_string('language').'</label></div>';
 echo '<div class="col-md-9" data-fieldtype="select">';
 echo '<select id="langselect" class="form-control" name="lang" onchange="this.form.submit()">';
+
 foreach ($languages as $name=>$value) {
     $selected = ($name == $CFG->lang) ? 'selected="selected"' : '';
     echo '<option value="'.s($name).'" '.$selected.'>'.$value.'</option>';
