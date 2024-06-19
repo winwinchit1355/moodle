@@ -22,5 +22,28 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 function local_message_before_footer(){ //moodle hook
-    // \core\notification::add('This is testing by WWC',\core\output\notification::NOTIFY_SUCCESS);
+    global $DB;
+    global $USER;
+    $messages = $DB->get_records('local_messages');
+    $sql = "SELECT lm.id,lm.message_text,lm.message_type FROM {local_messages} lm 
+            LEFT JOIN {local_message_read} lmr ON lm.id=lmr.message_id
+            WHERE lmr.user_id <> :user_id OR lmr.user_id IS NULL";
+    $params = [
+        'user_id'=>$USER->id,
+    ];
+    $messages = $DB->get_records_sql($sql,$params);
+    $skillsarray = array(
+        '0' => \core\output\notification::NOTIFY_SUCCESS,
+        '1' => \core\output\notification::NOTIFY_WARNING,
+        '2' => \core\output\notification::NOTIFY_INFO,
+        '3' => \core\output\notification::NOTIFY_ERROR,
+    );
+    foreach($messages as $message){
+        \core\notification::add($message->message_text,$skillsarray["$message->message_type"]);
+        $readrecord = new stdClass();
+        $readrecord->message_id = $message->id;
+        $readrecord->user_id = $USER->id;
+        $readrecord->time_read = time();
+        $DB->insert_record('local_message_read', $readrecord);
+    }
 }

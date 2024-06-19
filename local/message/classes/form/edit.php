@@ -19,11 +19,11 @@ class edit extends moodleform {
         // A common convention is to store it in a variable, such as `$mform`.
         $mform = $this->_form; // Don't forget the underscore!
         // Add elements to your form.
-        $mform->addElement('text', 'messagetext', 'Message Text');
+        $mform->addElement('text', 'messagetext', get_string('message_text','local_message'));
         // Set type of element.
         $mform->setType('messagetext', PARAM_NOTAGS);
         // Default value.
-        $mform->setDefault('messagetext', 'Please enter message');
+        $mform->setDefault('messagetext', get_string('please_enter_message','local_message'));
         
         //select dropdown
         $skillsarray = array(
@@ -32,7 +32,7 @@ class edit extends moodleform {
             '2' => \core\output\notification::NOTIFY_INFO,
             '3' => \core\output\notification::NOTIFY_ERROR,
         );
-        $mform->addElement('select', 'messagetype', 'Message Type', $skillsarray);
+        $mform->addElement('select', 'messagetype', get_string('message_type','local_message'), $skillsarray);
         $mform->setDefault('messagetype', 1);
 
         //action button
