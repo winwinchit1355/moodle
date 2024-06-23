@@ -39,7 +39,7 @@ function local_message_before_footer(){ //moodle hook
         '3' => \core\output\notification::NOTIFY_ERROR,
     );
     foreach($messages as $message){
-        \core\notification::add($message->message_text,$skillsarray["$message->message_type"]);
+        // \core\notification::add($message->message_text,$skillsarray["$message->message_type"]);
         $readrecord = new stdClass();
         $readrecord->message_id = $message->id;
         $readrecord->user_id = $USER->id;
